@@ -1,0 +1,19 @@
+problemset: https://codeforces.ml/api/problemset.problems
+
+username: 
+password: 
+
+groupId: 9109
+contest:
+    title: helloWerds
+    announcement: miaomiao
+    problems:
+    -   low: 800
+        high: 1600
+        tags:
+        - math
+        - greedy
+    -   low: 1600
+        high: 2000
+    -   low: 2000
+        high: 2400
