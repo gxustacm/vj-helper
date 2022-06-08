@@ -12,5 +12,5 @@
 3. run the program(It's best to run the program in terminal instead of opening it directly. If you open it directly, you may miss some important massage,such as error massage or other).
 
 ### warning
-1. focus on your network
+1. focus on your network, don't attempt to use this software before a contest.
 2. you can change problemset: https://codeforces.com/api/problemset.problems to problemset: https://codeforces.ml/api/problemset.problems, this is a mirror.
