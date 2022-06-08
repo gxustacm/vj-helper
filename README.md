@@ -9,4 +9,4 @@
 	* title: the title of contest
 	* announcement: as you think
 	* problem: It's a problem array, the low to high is the problem rating scope, tag is optional.
-3. run the program.
+3. run the program(It's best to run the program in terminal instead of opening it directly. If you open it directly, you may miss some important massage,such as error massage or other).
