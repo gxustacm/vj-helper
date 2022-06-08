@@ -41,7 +41,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(length.Milliseconds())
 	err = me.CreateContest(viper.GetString("title"), viper.GetString("announcement"), beginTime, length.Milliseconds(), problems, viper.GetInt("groupId"))
 	if err != nil {
 		log.Fatal(err)
