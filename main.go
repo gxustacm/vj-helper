@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -15,7 +14,7 @@ func main() {
 	me := model.ConstructorUser(viper.GetString("username"), viper.GetString("password"))
 	log.Println("logging in...")
 	me.Login()
-	fmt.Println(viper.Get("problems"))
+	log.Println(viper.Get("problems"))
 	log.Println("link to codeforces...")
 	var tmpconditions = viper.Get("problems")
 	data, err := json.Marshal(tmpconditions)

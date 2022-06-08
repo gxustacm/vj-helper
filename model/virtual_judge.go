@@ -175,6 +175,7 @@ func (me *user) CreateContest(title string, announcement string, beginTime time.
 	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	log.Println("waiting crawled, about 10 second")
 	time.Sleep(time.Second * 10)
+	log.Println("start link vj and create contest on vj.")
 	res, err := client.Do(req)
 	if err != nil {
 		log.Fatalln(err)
