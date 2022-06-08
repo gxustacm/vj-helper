@@ -21,15 +21,15 @@ func init() {
 	if err != nil { // 处理读取配置文件的错误
 		panic(fmt.Errorf("fatal error config file: %s ", err))
 	}
-	// log.SetFlags(log.Flags() | log.Lshortfile)
+	log.SetFlags(log.Flags() | log.Lshortfile)
 	rand.Seed(time.Now().UnixNano())
 }
 func findProblemList(tags []string) (problemList, error) {
 	var tag = strings.Join(tags, ";")
 	res, err := http.Get(viper.GetString("problemset") + "?tags=" + tag)
-	log.Println(viper.GetString("problemset") + "?tags=" + tag)
+	log.Println("link " + viper.GetString("problemset") + "?tags=" + tag)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return problemList{}, err
 	}
 	var data problemList
@@ -37,7 +37,7 @@ func findProblemList(tags []string) (problemList, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		log.Println(string(body))
-		log.Println(err)
+		log.Fatalln(err)
 		return problemList{}, err
 	}
 	if data.Status != "OK" {
@@ -49,7 +49,7 @@ func findProblemList(tags []string) (problemList, error) {
 func findProblemListByCondition(tags []string, low int, high int) ([]problemInfo, error) {
 	originData, err := findProblemList(tags)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return nil, err
 	}
 	var data = originData.Result.Problems
@@ -68,7 +68,7 @@ func findProblemListByCondition(tags []string, low int, high int) ([]problemInfo
 func FindOneProblemByCondition(condition ProblemCondition) (problemInfo, error) {
 	list, err := findProblemListByCondition(condition.Tags, condition.Low, condition.High)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return problemInfo{}, err
 	}
 	return list[rand.Intn(len(list))], nil
@@ -79,7 +79,7 @@ func FindSomeProblemByCondition(conditions []ProblemCondition) ([]problemInfo, e
 	for i := 0; i < len(conditions); i++ {
 		data, err := FindOneProblemByCondition(conditions[i])
 		if err != nil {
-			log.Println(err)
+			log.Fatalln(err)
 			return nil, err
 		}
 		result = append(result, data)
@@ -102,7 +102,7 @@ func convertCodeForcesToVirtual(problems []problemInfo) []VirtualNaiveProblem {
 func GenerateSomeCodeForcesProblem(condition []ProblemCondition) ([]VirtualNaiveProblem, error) {
 	someProblem, err := FindSomeProblemByCondition(condition)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return nil, err
 	}
 	result := convertCodeForcesToVirtual(someProblem)

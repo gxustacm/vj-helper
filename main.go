@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
+	"time"
 	"virtual_judge/model"
 
 	"github.com/spf13/viper"
@@ -11,9 +13,11 @@ import (
 
 func main() {
 	me := model.ConstructorUser(viper.GetString("username"), viper.GetString("password"))
+	log.Println("logging in...")
 	me.Login()
-	fmt.Println(viper.Get("contest.problems"))
-	var tmpconditions = viper.Get("contest.problems")
+	fmt.Println(viper.Get("problems"))
+	log.Println("link to codeforces...")
+	var tmpconditions = viper.Get("problems")
 	data, err := json.Marshal(tmpconditions)
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +31,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = me.CreateContest(viper.GetString("contest.title"), problems, 9109)
+	t := viper.GetString("beginTime")
+	t = strings.TrimSuffix(t, " +0000 UTC")
+	beginTime, err := time.Parse("2006-01-02 15:04:05", t)
+	if err != nil {
+		log.Fatal(err)
+	}
+	length, err := time.ParseDuration(viper.GetString("length"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(length.Milliseconds())
+	err = me.CreateContest(viper.GetString("title"), viper.GetString("announcement"), beginTime, length.Milliseconds(), problems, viper.GetInt("groupId"))
 	if err != nil {
 		log.Fatal(err)
 	}

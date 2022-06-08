@@ -10,8 +10,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 func ConstructorUser(username string, password string) user {
@@ -24,14 +22,14 @@ func (me *user) Login() error {
 	payload.Add("password", me.Password)
 	req, err := http.NewRequest("POST", "https://vjudge.net/user/login", strings.NewReader(payload.Encode()))
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded; param=value")
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	defer res.Body.Close()
@@ -57,7 +55,7 @@ func (me *user) FindProblemSimple(oj string, problemId string) (VirtualSimplePro
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", "https://vjudge.net/problem/findProblemSimple", strings.NewReader(payload.Encode()))
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleProblem{}, err
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded; param=value")
@@ -66,19 +64,19 @@ func (me *user) FindProblemSimple(oj string, problemId string) (VirtualSimplePro
 	req.AddCookie(&me.Jax)
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleProblem{}, err
 	}
 	defer res.Body.Close()
 	var result VirtualSimpleProblem
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleProblem{}, err
 	}
 	err = json.Unmarshal(data, &result)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleProblem{}, err
 	}
 	return result, err
@@ -91,7 +89,7 @@ func (me *user) createSimpleContest(GroupId int) (VirtualSimpleContestInfo, erro
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://vjudge.net/contest/create?"+payload.Encode(), nil)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleContestInfo{}, err
 	}
 	req.AddCookie(&me.JSESSIONID)
@@ -99,34 +97,34 @@ func (me *user) createSimpleContest(GroupId int) (VirtualSimpleContestInfo, erro
 	req.AddCookie(&me.Jax)
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleContestInfo{}, err
 	}
 	defer res.Body.Close()
 	var result VirtualSimpleContestInfo
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleContestInfo{}, err
 	}
 	err = json.Unmarshal(data, &result)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return VirtualSimpleContestInfo{}, err
 	}
 	return result, err
 }
 
-func (me *user) CreateContest(title string, problems []VirtualNaiveProblem, groupId int) error {
+func (me *user) CreateContest(title string, announcement string, beginTime time.Time, length int64, problems []VirtualNaiveProblem, groupId int) error {
 	simpleInfo, err := me.createSimpleContest(groupId)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	var contest = VirtualContestInfo{
 		AlwaysEnableManualSubmit: simpleInfo.AlwaysEnableManualSubmit,
-		Announcement:             viper.GetString("contest.announcement"),
-		BeginTime:                time.Now().Add(time.Hour).UnixMilli(),
+		Announcement:             announcement,
+		BeginTime:                beginTime.UnixMilli(),
 		ContestId:                simpleInfo.ContestId,
 		Description: VirtualDescriptionType{
 			Content: "",
@@ -134,7 +132,7 @@ func (me *user) CreateContest(title string, problems []VirtualNaiveProblem, grou
 		},
 		GroupId:      strconv.Itoa(groupId),
 		Groups:       simpleInfo.Groups,
-		Length:       simpleInfo.Length,
+		Length:       length,
 		Openness:     simpleInfo.Openness,
 		PartialScore: simpleInfo.PartialScore,
 		Password:     "",
@@ -148,7 +146,7 @@ func (me *user) CreateContest(title string, problems []VirtualNaiveProblem, grou
 	for i := 0; i < len(problems); i++ {
 		info, err := me.FindProblemSimple(problems[i].Oj, problems[i].ProblemId)
 		if err != nil {
-			log.Println(err)
+			log.Fatalln(err)
 			return err
 		}
 		var res = VirtualProblem{
@@ -163,12 +161,12 @@ func (me *user) CreateContest(title string, problems []VirtualNaiveProblem, grou
 	client := &http.Client{}
 	reqInfo, err := json.Marshal(contest)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	req, err := http.NewRequest("POST", "https://vjudge.net/contest/edit", bytes.NewReader(reqInfo))
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	req.AddCookie(&me.JSESSIONID)
@@ -179,12 +177,12 @@ func (me *user) CreateContest(title string, problems []VirtualNaiveProblem, grou
 	time.Sleep(time.Second * 10)
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 	log.Println(string(data))
