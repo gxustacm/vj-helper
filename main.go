@@ -33,6 +33,7 @@ func main() {
 	t := viper.GetString("beginTime")
 	t = strings.TrimSuffix(t, " +0000 UTC")
 	beginTime, err := time.Parse("2006-01-02 15:04:05", t)
+	beginTime = beginTime.Add(-time.Hour * 8)
 	if err != nil {
 		log.Fatal(err)
 	}
