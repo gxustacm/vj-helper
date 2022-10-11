@@ -32,7 +32,7 @@ func TestFindOneProblemByRating(t *testing.T) {
 }
 
 func TestFindSomeProblemByRating(t *testing.T) {
-	data, err := FindSomeProblemByCondition([]ProblemCondition{ProblemCondition{Tags: []string{"math", "greedy"}, Low: 800, High: 1400}, ProblemCondition{Tags: []string{"math", "greedy"}, Low: 800, High: 1600}})
+	data, err := FindSomeProblemByCondition([]ProblemCondition{{Tags: []string{"math", "greedy"}, Low: 800, High: 1400}, {Tags: []string{"math", "greedy"}, Low: 800, High: 1600}})
 	if err != nil {
 		t.Error(err)
 	} else {

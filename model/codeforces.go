@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/spf13/viper"
@@ -21,7 +22,6 @@ func init() {
 	if err != nil { // 处理读取配置文件的错误
 		panic(fmt.Errorf("fatal error config file: %s ", err))
 	}
-	log.SetFlags(log.Flags() | log.Lshortfile)
 	rand.Seed(time.Now().UnixNano())
 }
 func findProblemList(tags []string) (problemList, error) {
@@ -76,14 +76,22 @@ func FindOneProblemByCondition(condition ProblemCondition) (problemInfo, error) 
 
 func FindSomeProblemByCondition(conditions []ProblemCondition) ([]problemInfo, error) {
 	var result []problemInfo
+	var pool = sync.WaitGroup{}
+	pool.Add(len(conditions))
+	var mux = sync.RWMutex{}
 	for i := 0; i < len(conditions); i++ {
-		data, err := FindOneProblemByCondition(conditions[i])
-		if err != nil {
-			log.Fatalln(err)
-			return nil, err
-		}
-		result = append(result, data)
+		go func(i int) {
+			data, err := FindOneProblemByCondition(conditions[i])
+			if err != nil {
+				log.Fatalln(err)
+			}
+			mux.Lock()
+			result = append(result, data)
+			mux.Unlock()
+			pool.Done()
+		}(i)
 	}
+	pool.Wait()
 	return result, nil
 }
 

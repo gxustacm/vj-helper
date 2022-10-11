@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os/exec"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -187,5 +189,34 @@ func (me *user) CreateContest(title string, announcement string, beginTime time.
 		return err
 	}
 	log.Println(string(data))
+	var contestId map[string]int
+	err = json.Unmarshal(data, &contestId)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	OpenWebsite("https://vjudge.net/contest/" + strconv.Itoa(contestId["contestId"]))
 	return nil
+}
+
+var commands = map[string]string{
+	"windows": "start",
+	"darwin":  "open",
+	"linux":   "xdg-open",
+}
+
+func OpenWebsite(path string) {
+	run, ok := commands[runtime.GOOS]
+	if !ok {
+		log.Fatalf("don't know how to open things on %s platform", runtime.GOOS)
+	}
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd.exe", "/C", "start", path)
+	} else {
+		cmd = exec.Command(run, path)
+	}
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

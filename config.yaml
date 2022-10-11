@@ -1,12 +1,12 @@
 problemset: https://codeforces.com/api/problemset.problems
 
-username: 
-password: 
+username: jaxleof
+password: AIjiajia421
 
-groupId: 13376
-title: helloWerds
+groupId: 9109
+title: etst
 announcement: miaomiao
-beginTime: 2022-06-12 23:12:34
+beginTime: 2022-11-1 23:12:34
 length: 5h12m
 problems:
 -   low: 800
