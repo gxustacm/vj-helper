@@ -75,19 +75,16 @@ func FindOneProblemByCondition(condition ProblemCondition) (problemInfo, error) 
 }
 
 func FindSomeProblemByCondition(conditions []ProblemCondition) ([]problemInfo, error) {
-	var result []problemInfo
+	var result []problemInfo = make([]problemInfo, len(conditions))
 	var pool = sync.WaitGroup{}
 	pool.Add(len(conditions))
-	var mux = sync.RWMutex{}
 	for i := 0; i < len(conditions); i++ {
 		go func(i int) {
 			data, err := FindOneProblemByCondition(conditions[i])
 			if err != nil {
 				log.Fatalln(err)
 			}
-			mux.Lock()
-			result = append(result, data)
-			mux.Unlock()
+			result[i] = data
 			pool.Done()
 		}(i)
 	}
