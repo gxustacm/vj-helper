@@ -14,3 +14,27 @@
 ### warning
 1. focus on your network, don't attempt to use this software before a contest.
 2. you can change problemset: https://codeforces.com/api/problemset.problems to problemset: https://codeforces.ml/api/problemset.problems, this is a mirror.
+
+## config.yaml format
+you have to create config.yaml before run program.
+```
+problemset: https://codeforces.com/api/problemset.problems //codeforces api domain
+
+username: $vj_account
+password: $vj_password
+
+groupId: 9109  //vj groupId, you can find out by above method in usage
+title: etst // contest title
+announcement: miaomiao
+beginTime: 2022-10-12 23:12:34 
+length: 5h12m //contest length
+
+// you can add multiple problem below.
+problems:
+-   low: 800 // lowest rating of problem
+    high: 1600 // highest rating of problem 
+-   low: 1600
+    high: 2000
+-   low: 2000
+    high: 2400
+```

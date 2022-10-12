@@ -1,13 +1,13 @@
 problemset: https://codeforces.com/api/problemset.problems
 
-username: jaxleof
-password: AIjiajia421
+username: $vj_account
+password: $vj_password
 
-groupId: 9109
-title: etst
-announcement: miaomiao
-beginTime: 2022-10-11 23:12:34
-length: 5h12m
+groupId: 
+title: 
+announcement: 
+beginTime: 
+length: 
 problems:
 -   low: 800
     high: 1600
