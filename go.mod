@@ -1,4 +1,4 @@
-module virtual_judge
+module github.com/gxustacm/virtual_judge
 
 go 1.18
 

@@ -5,7 +5,8 @@ import (
 	"log"
 	"strings"
 	"time"
-	"virtual_judge/model"
+
+	"github.com/gxustacm/virtual_judge/model"
 
 	"github.com/spf13/viper"
 )
