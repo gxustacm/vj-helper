@@ -1,4 +1,4 @@
-#### 切换语言: zh[./doc/README.md] / en[.]
+#### 切换语言: [zh](./doc/README.md) / en
 ## introduce
 This is a project based on codeforces problems and virtual judges, it can help you free your hands, randomly select problems from codeforces that meet your requirements, and then generate competitions in virtual judges.
 
