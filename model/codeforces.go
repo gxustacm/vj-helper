@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/spf13/viper"
@@ -76,19 +75,13 @@ func FindOneProblemByCondition(condition ProblemCondition) (problemInfo, error) 
 
 func FindSomeProblemByCondition(conditions []ProblemCondition) ([]problemInfo, error) {
 	var result []problemInfo = make([]problemInfo, len(conditions))
-	var pool = sync.WaitGroup{}
-	pool.Add(len(conditions))
 	for i := 0; i < len(conditions); i++ {
-		go func(i int) {
-			data, err := FindOneProblemByCondition(conditions[i])
-			if err != nil {
-				log.Fatalln(err)
-			}
-			result[i] = data
-			pool.Done()
-		}(i)
+		data, err := FindOneProblemByCondition(conditions[i])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		result[i] = data
 	}
-	pool.Wait()
 	return result, nil
 }
 

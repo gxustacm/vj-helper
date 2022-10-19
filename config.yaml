@@ -1,17 +1,24 @@
 problemset: https://codeforces.com/api/problemset.problems
 
-username: $vj_account
-password: $vj_password
+username:
+password: 
 
-groupId: 
-title: 
-announcement: 
-beginTime: 
-length: 
+groupId: 9109
+title: helloWerds
+announcement: miaomiao
+beginTime: 2022-06-12 23:12:34
+length: 5h12m
 problems:
 -   low: 800
     high: 1600
--   low: 1600
-    high: 2000
--   low: 2000
-    high: 2400
+-   low: 800
+    high: 1600
+-   low: 800
+    high: 1600
+-   low: 800
+    high: 1600
+-   low: 800
+    high: 1600
+-   low: 800
+    high: 1600
+

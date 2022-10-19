@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.Flags() | log.Lshortfile)
 	me := model.ConstructorUser(viper.GetString("username"), viper.GetString("password"))
 	log.Println("logging in...")
 	me.Login()
